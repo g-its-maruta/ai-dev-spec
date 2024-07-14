@@ -1,0 +1,135 @@
+openapi: 3.0.0
+info:
+  title: EC Site API
+  version: 1.0.0
+paths:
+  /api/products/:
+    get:
+      tags:
+        - 商品一覧
+      summary: 商品一覧取得API
+      responses:
+        '200':
+          description: 商品一覧を取得
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    name:
+                      type: string
+                    description:
+                      type: string
+                    price:
+                      type: number
+                    image_url:
+                      type: string
+
+  /api/cart/:
+    get:
+      tags:
+          - カート処理
+      summary: カート内容取得API
+      responses:
+        '200':
+          description: カート内容を取得
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        product_id:
+                          type: integer
+                        name:
+                          type: string
+                        quantity:
+                          type: integer
+                        price:
+                          type: number
+                  total_price:
+                    type: number
+
+  /api/cart/add/:
+    post:
+      tags:
+          - カート処理      
+      summary: カートに商品追加API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                quantity:
+                  type: integer
+      responses:
+        '200':
+          description: 商品がカートに追加された
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /api/cart/remove/:
+    post:
+      tags:
+          - カート処理      
+      summary: カートから商品削除API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+      responses:
+        '200':
+          description: 商品がカートから削除された
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+
+  /api/cart/update/:
+    post:
+      tags:
+          - カート処理      
+      summary: カート内の商品数量更新API
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                product_id:
+                  type: integer
+                quantity:
+                  type: integer
+      responses:
+        '200':
+          description: 商品数量が更新された
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
