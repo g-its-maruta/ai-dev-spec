@@ -1,4 +1,4 @@
-# product
+# products
 
 ## テーブル情報
 
@@ -7,10 +7,10 @@
 | システム名                     | AI-APP                                                                                               |
 | サブシステム名                 |                                                                                                      |
 | スキーマ名                     | data                                                                                                 |
-| 物理テーブル名                 | product                                                                                              |
+| 物理テーブル名                 | products                                                                                             |
 | 論理テーブル名                 |                                                                                                      |
-| 作成者                         | Maruta                                                                                               |
-| 作成日                         | 2024/07/14                                                                                           |
+| 作成者                         | Y.Maruta                                                                                             |
+| 作成日                         | 2024/08/04                                                                                           |
 | RDBMS                          | PostgreSQL 10.21 (Debian 10.21-1.pgdg90+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516, 64-bit 10.21 |
 
 
@@ -19,11 +19,9 @@
 
 | No. | 論理名                         | 物理名                         | データ型                       | Not Null | デフォルト           | 備考                           |
 |----:|:-------------------------------|:-------------------------------|:-------------------------------|:---------|:---------------------|:-------------------------------|
-|   1 | 商品ID                         | id                             | serial                         | Yes (PK) |                      |                                |
-|   2 | 商品名                         | name                           | character varying(255)         | Yes      |                      |                                |
-|   3 | 商品説明                       | description                    | text                           | Yes      |                      |                                |
-|   4 | 価格                           | price                          | numeric(10, 2)                 | Yes      |                      |                                |
-|   5 | 画像URL                        | image_url                      | character varying(200)         | Yes      |                      |                                |
+|   1 | 商品ID                         | productid                      | serial                         | Yes (PK) |                      |                                |
+|   2 | 商品名                         | productname                    | character varying(255)         | Yes      |                      |                                |
+|   3 | 価格                           | price                          | integer                        | Yes      |                      |                                |
 
 
 
@@ -31,7 +29,7 @@
 
 | No. | インデックス名                 | カラムリスト                             | ユニーク   | オプション                     | 
 |----:|:-------------------------------|:-----------------------------------------|:-----------|:-------------------------------|
-|   1 | product_pkey                   | id                                       | Yes        |                                |
+|   1 | products_pkey                  | productid                                | Yes        |                                |
 
 
 
@@ -39,12 +37,10 @@
 
 | No. | 制約名                         | 種類                           | 制約定義                       |
 |----:|:-------------------------------|:-------------------------------|:-------------------------------|
-|   1 | 1559310_1559360_1_not_null     | CHECK                          | id IS NOT NULL                 |
-|   2 | 1559310_1559360_2_not_null     | CHECK                          | name IS NOT NULL               |
-|   3 | 1559310_1559360_3_not_null     | CHECK                          | description IS NOT NULL        |
-|   4 | 1559310_1559360_4_not_null     | CHECK                          | price IS NOT NULL              |
-|   5 | 1559310_1559360_5_not_null     | CHECK                          | image_url IS NOT NULL          |
-|   6 | product_pkey                   | PRIMARY KEY                    | id                             |
+|   1 | 1559310_1565597_1_not_null     | CHECK                          | productid IS NOT NULL          |
+|   2 | 1559310_1565597_2_not_null     | CHECK                          | productname IS NOT NULL        |
+|   3 | 1559310_1565597_3_not_null     | CHECK                          | price IS NOT NULL              |
+|   4 | products_pkey                  | PRIMARY KEY                    | productid                      |
 
 
 
@@ -59,6 +55,7 @@
 
 | No. | 外部キー名                     | カラムリスト                             | 参照元                         | 参照元カラムリスト                       | ON DELETE    | ON UPDATE    |
 |----:|:-------------------------------|:-----------------------------------------|:-------------------------------|:-----------------------------------------|:-------------|:-------------|
-|   1 | cart_item_product_id_fkey      | id                                       | data.cart_item                 | product_id                               | CASCADE      |              |
+|   1 | cart_productid_fkey            | productid                                | data.cart                      | productid                                |              |              |
+|   2 | orderdetails_productid_fkey    | productid                                | data.orderdetails              | productid                                |              |              |
 
 

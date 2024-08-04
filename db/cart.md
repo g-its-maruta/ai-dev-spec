@@ -1,4 +1,4 @@
-# cart_items
+# cart
 
 ## テーブル情報
 
@@ -7,10 +7,10 @@
 | システム名                     | AI-APP                                                                                               |
 | サブシステム名                 |                                                                                                      |
 | スキーマ名                     | data                                                                                                 |
-| 物理テーブル名                 | cart_items                                                                                           |
+| 物理テーブル名                 | cart                                                                                                 |
 | 論理テーブル名                 |                                                                                                      |
-| 作成者                         | Maruta                                                                                               |
-| 作成日                         | 2024/07/14                                                                                           |
+| 作成者                         | Y.Maruta                                                                                             |
+| 作成日                         | 2024/08/04                                                                                           |
 | RDBMS                          | PostgreSQL 10.21 (Debian 10.21-1.pgdg90+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516, 64-bit 10.21 |
 
 
@@ -19,8 +19,9 @@
 
 | No. | 論理名                         | 物理名                         | データ型                       | Not Null | デフォルト           | 備考                           |
 |----:|:-------------------------------|:-------------------------------|:-------------------------------|:---------|:---------------------|:-------------------------------|
-|   1 | カートID                       | cart_id                        | integer                        | Yes (PK) |                      |                                |
-|   2 | カートアイテムID               | cart_item_id                   | integer                        | Yes (PK) |                      |                                |
+|   1 |                                | cartid                         | serial                         | Yes      |                      |                                |
+|   2 | 商品ID                         | productid                      | integer                        |          |                      |                                |
+|   3 | 数量                           | quantity                       | integer                        | Yes      |                      |                                |
 
 
 
@@ -28,7 +29,6 @@
 
 | No. | インデックス名                 | カラムリスト                             | ユニーク   | オプション                     | 
 |----:|:-------------------------------|:-----------------------------------------|:-----------|:-------------------------------|
-|   1 | cart_items_pkey                | cart_id,cart_item_id                     | Yes        |                                |
 
 
 
@@ -36,9 +36,9 @@
 
 | No. | 制約名                         | 種類                           | 制約定義                       |
 |----:|:-------------------------------|:-------------------------------|:-------------------------------|
-|   1 | 1559310_1559390_1_not_null     | CHECK                          | cart_id IS NOT NULL            |
-|   2 | 1559310_1559390_2_not_null     | CHECK                          | cart_item_id IS NOT NULL       |
-|   3 | cart_items_pkey                | PRIMARY KEY                    | cart_id,cart_item_id           |
+|   1 | 1559310_1565603_1_not_null     | CHECK                          | productid IS NOT NULL          |
+|   2 | 1559310_1565603_2_not_null     | CHECK                          | quantity IS NOT NULL           |
+|   3 | 1559310_1565603_3_not_null     | CHECK                          | addedat IS NOT NULL            |
 
 
 
@@ -46,8 +46,7 @@
 
 | No. | 外部キー名                     | カラムリスト                             | 参照先                         | 参照先カラムリスト                       | ON DELETE    | ON UPDATE    |
 |----:|:-------------------------------|:-----------------------------------------|:-------------------------------|:-----------------------------------------|:-------------|:-------------|
-|   1 | cart_items_cart_id_fkey        | cart_id                                  | data.cart                      | id                                       | CASCADE      |              |
-|   2 | cart_items_cart_item_id_fkey   | cart_item_id                             | data.cart_item                 | id                                       | CASCADE      |              |
+|   1 | cart_productid_fkey            | productid                                | data.products                  | productid                                |              |              |
 
 
 

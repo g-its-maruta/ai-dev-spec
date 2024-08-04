@@ -1,81 +1,131 @@
 openapi: 3.0.0
 info:
-  title: EC Site API
+  title: 商品管理API
   version: 1.0.0
+  description: >
+    このAPIは、商品の選択、カート管理、注文確認および注文履歴の管理を行うシステムのためのものです。
+
 paths:
-  /api/products/:
+  /products:
     get:
-      tags:
-        - 商品一覧
-      summary: 商品一覧取得API
+      summary: 商品一覧の取得
+      description: 全商品の一覧を取得します。
       responses:
         '200':
-          description: 商品一覧を取得
+          description: 正常に商品一覧を取得
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  type: object
-                  properties:
-                    id:
-                      type: integer
-                    name:
-                      type: string
-                    description:
-                      type: string
-                    price:
-                      type: number
-                    image_url:
-                      type: string
+                  $ref: '#/components/schemas/Product'
 
-  /api/cart/:
+  /products/{id}:
     get:
-      tags:
-          - カート処理
-      summary: カート内容取得API
+      summary: 商品情報の取得
+      description: 特定の商品情報を取得します。
+      parameters:
+        - in: path
+          name: id
+          required: true
+          schema:
+            type: integer
+          description: 商品ID
       responses:
         '200':
-          description: カート内容を取得
+          description: 正常に商品情報を取得
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          description: 商品が見つかりません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /cart:
+    post:
+      summary: カートに商品を追加
+      description: 商品をカートに追加します。同じ商品がカートに存在する場合はエラーメッセージを返します。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: integer
+                  description: 追加する商品のID
+      responses:
+        '200':
+          description: 商品がカートに追加されました
           content:
             application/json:
               schema:
                 type: object
                 properties:
-                  items:
+                  message:
+                    type: string
+                    example: 商品がカートに追加されました
+                  cart:
                     type: array
                     items:
-                      type: object
-                      properties:
-                        product_id:
-                          type: integer
-                        name:
-                          type: string
-                        quantity:
-                          type: integer
-                        price:
-                          type: number
-                  total_price:
-                    type: number
+                      $ref: '#/components/schemas/CartItem'
+        '400':
+          description: 商品が選択されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '409':
+          description: すでにカートに入っています
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: すでにカートに入っています
+                  cart:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CartItem'
 
-  /api/cart/add/:
-    post:
-      tags:
-          - カート処理      
-      summary: カートに商品追加API
+    get:
+      summary: カートの内容を取得
+      description: カートの内容を取得します。
+      responses:
+        '200':
+          description: 正常にカートの内容を取得
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/CartItem'
+
+    delete:
+      summary: カートから商品を削除
+      description: カートから複数の商品を一括削除します。
       requestBody:
+        required: true
         content:
           application/json:
             schema:
               type: object
               properties:
-                product_id:
-                  type: integer
-                quantity:
-                  type: integer
+                productIds:
+                  type: array
+                  items:
+                    type: integer
+                  description: 削除する商品のIDリスト
       responses:
         '200':
-          description: 商品がカートに追加された
+          description: 商品がカートから削除されました
           content:
             application/json:
               schema:
@@ -83,23 +133,25 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: 商品がカートから削除されました
+                  cart:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/CartItem'
+        '400':
+          description: 商品が選択されていません
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
-  /api/cart/remove/:
+  /order:
     post:
-      tags:
-          - カート処理      
-      summary: カートから商品削除API
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                product_id:
-                  type: integer
+      summary: 注文を確定
+      description: 注文を確定します。
       responses:
         '200':
-          description: 商品がカートから削除された
+          description: 注文が完了しました
           content:
             application/json:
               schema:
@@ -107,29 +159,64 @@ paths:
                 properties:
                   message:
                     type: string
+                    example: 注文が完了しました
 
-  /api/cart/update/:
-    post:
-      tags:
-          - カート処理      
-      summary: カート内の商品数量更新API
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                product_id:
-                  type: integer
-                quantity:
-                  type: integer
+  /order/history:
+    get:
+      summary: 注文履歴の取得
+      description: 注文履歴を取得します。
       responses:
         '200':
-          description: 商品数量が更新された
+          description: 正常に注文履歴を取得
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  message:
-                    type: string
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        productId:
+          type: integer
+        productName:
+          type: string
+        price:
+          type: integer
+
+    CartItem:
+      type: object
+      properties:
+        productId:
+          type: integer
+        productName:
+          type: string
+        price:
+          type: integer
+        quantity:
+          type: integer
+        addedAt:
+          type: string
+          format: date-time
+          description: カートに追加された日時
+
+    Order:
+      type: object
+      properties:
+        orderId:
+          type: integer
+        orderDate:
+          type: string
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+
+    Error:
+      type: object
+      properties:
+        error:
+          type: string

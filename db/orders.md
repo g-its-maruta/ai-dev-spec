@@ -1,4 +1,4 @@
-# cart_item
+# orders
 
 ## テーブル情報
 
@@ -7,10 +7,10 @@
 | システム名                     | AI-APP                                                                                               |
 | サブシステム名                 |                                                                                                      |
 | スキーマ名                     | data                                                                                                 |
-| 物理テーブル名                 | cart_item                                                                                            |
+| 物理テーブル名                 | orders                                                                                               |
 | 論理テーブル名                 |                                                                                                      |
-| 作成者                         | Maruta                                                                                               |
-| 作成日                         | 2024/07/14                                                                                           |
+| 作成者                         | Y.Maruta                                                                                             |
+| 作成日                         | 2024/08/04                                                                                           |
 | RDBMS                          | PostgreSQL 10.21 (Debian 10.21-1.pgdg90+1) on aarch64-unknown-linux-gnu, compiled by gcc (Debian 6.3.0-18+deb9u1) 6.3.0 20170516, 64-bit 10.21 |
 
 
@@ -19,9 +19,8 @@
 
 | No. | 論理名                         | 物理名                         | データ型                       | Not Null | デフォルト           | 備考                           |
 |----:|:-------------------------------|:-------------------------------|:-------------------------------|:---------|:---------------------|:-------------------------------|
-|   1 | カートアイテムID               | id                             | serial                         | Yes (PK) |                      |                                |
-|   2 | 商品ID                         | product_id                     | integer                        | Yes      |                      |                                |
-|   3 | 数量                           | quantity                       | integer                        | Yes      |                      |                                |
+|   1 | 注文ID                         | orderid                        | serial                         | Yes (PK) |                      |                                |
+|   2 | 注文日時                       | orderdate                      | timestamp(6) without time zone | Yes      |                      |                                |
 
 
 
@@ -29,7 +28,7 @@
 
 | No. | インデックス名                 | カラムリスト                             | ユニーク   | オプション                     | 
 |----:|:-------------------------------|:-----------------------------------------|:-----------|:-------------------------------|
-|   1 | cart_item_pkey                 | id                                       | Yes        |                                |
+|   1 | orders_pkey                    | orderid                                  | Yes        |                                |
 
 
 
@@ -37,10 +36,9 @@
 
 | No. | 制約名                         | 種類                           | 制約定義                       |
 |----:|:-------------------------------|:-------------------------------|:-------------------------------|
-|   1 | 1559310_1559371_1_not_null     | CHECK                          | id IS NOT NULL                 |
-|   2 | 1559310_1559371_2_not_null     | CHECK                          | product_id IS NOT NULL         |
-|   3 | 1559310_1559371_3_not_null     | CHECK                          | quantity IS NOT NULL           |
-|   4 | cart_item_pkey                 | PRIMARY KEY                    | id                             |
+|   1 | 1559310_1565613_1_not_null     | CHECK                          | orderid IS NOT NULL            |
+|   2 | 1559310_1565613_2_not_null     | CHECK                          | orderdate IS NOT NULL          |
+|   3 | orders_pkey                    | PRIMARY KEY                    | orderid                        |
 
 
 
@@ -48,7 +46,6 @@
 
 | No. | 外部キー名                     | カラムリスト                             | 参照先                         | 参照先カラムリスト                       | ON DELETE    | ON UPDATE    |
 |----:|:-------------------------------|:-----------------------------------------|:-------------------------------|:-----------------------------------------|:-------------|:-------------|
-|   1 | cart_item_product_id_fkey      | product_id                               | data.product                   | id                                       | CASCADE      |              |
 
 
 
@@ -56,6 +53,6 @@
 
 | No. | 外部キー名                     | カラムリスト                             | 参照元                         | 参照元カラムリスト                       | ON DELETE    | ON UPDATE    |
 |----:|:-------------------------------|:-----------------------------------------|:-------------------------------|:-----------------------------------------|:-------------|:-------------|
-|   1 | cart_items_cart_item_id_fkey   | id                                       | data.cart_items                | cart_item_id                             | CASCADE      |              |
+|   1 | orderdetails_orderid_fkey      | orderid                                  | data.orderdetails              | orderid                                  |              |              |
 
 
